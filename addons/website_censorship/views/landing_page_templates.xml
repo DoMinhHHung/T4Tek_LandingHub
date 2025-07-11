@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="template_landing_review" name="Landing Page Review">
+    <t t-call="web.basic_layout">
+
+        <style>
+            *{
+                margin:0;
+            }   
+            .o_main_content {
+                max-width: 100% !important;
+                padding: 0 !important;
+            }
+
+            .o_body_html .container {
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .full-width{
+                margin-top:10px;
+                height: 100vh;
+            }
+            .container, .o_container_small, .container-fluid, .container-xxl, .container-xl, .container-lg, .container-md, .container-sm {
+                margin-right: 0;
+                margin-left: 0;
+            }
+
+            @media (min-width: 1400px) {
+                .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container, .o_container_small {
+                    max-width: 100%;
+                }
+            }
+
+        </style>
+
+        <div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningTitle" aria-hidden="true" style="display: none; border-radius: 50px !important;">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title" id="warningTitle">⚠️ Cảnh báo Kiểm duyệt</h5>
+                </div>
+                <div class="modal-body">
+                <p><strong>Lưu ý:</strong> Bạn đang thực hiện hành động kiểm duyệt nội dung landing page.</p>
+                <ul>
+                    <li>Tuân thủ các quy định về kiểm duyệt nội dung.</li>
+                    <li>Không phê duyệt các trang web có nội dung không hợp lệ hoặc trái quy định pháp luật.</li>
+                    <li>Hành động kiểm duyệt sẽ được ghi nhận và bạn sẽ chịu trách nhiệm với kết quả.</li>
+                </ul>
+                </div>
+                <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="window.location.href='/web'">Tôi không đồng ý</button>
+                <button class="btn btn-primary" data-bs-dismiss="modal">Tôi đồng ý và tiếp tục</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+
+        <div class="full-width" style="display: flex; gap: 20px;">
+                <!-- Left: Iframe -->
+                <div style="flex: 5;">
+                    <h3><t t-esc="landing.name"/></h3>
+
+                    <div style="margin-bottom: 1rem;">
+                        <label><input type="radio" name="mode" onclick="setDevice('desktop')" checked="checked"/> Máy tính</label>
+                        <label style="margin-left: 1rem;"><input type="radio" name="mode" onclick="setDevice('tablet')"/> Máy tính bảng</label>
+                        <label style="margin-left: 1rem;"><input type="radio" name="mode" onclick="setDevice('mobile')"/> Điện thoại</label>
+                    </div>
+
+                    <iframe id="landingIframe"
+                            t-att-src="landing.url"
+                            width="100%" height="100%"
+                            style="border:1px solid #ccc;">
+                    </iframe>
+                </div>
+
+                <!-- Right: Checkboxes -->
+                <div style="flex: 1;">
+                    <h4>Kiểm duyệt nội dung</h4>
+                    <form method="post" t-attf-action="/landing/page/review/save/{{ landing.id }}">
+                        <div>
+
+                        <label><input type="checkbox" name="is_design_ok" t-att-checked="'checked' if landing.is_design_ok else None"/> Thiết kế hợp lý</label><br/>
+                        <label><input type="checkbox" name="is_text_clear" t-att-checked="'checked' if landing.is_text_clear else None"/> Nội dung rõ ràng</label><br/>
+                        <label><input type="checkbox" name="is_mobile_friendly" t-att-checked="'checked' if landing.is_mobile_friendly else None"/> Thân thiện di động</label><br/>
+                        <label><input type="checkbox" name="is_links_working" t-att-checked="'checked' if landing.is_links_working else None"/> Liên kết hoạt động đúng</label><br/>
+                        <label><input type="checkbox" name="is_form_functional" t-att-checked="'checked' if landing.is_form_functional else None"/> Biểu mẫu hoạt động</label><br/>
+                        <label><input type="checkbox" name="is_browser_compatible" t-att-checked="'checked' if landing.is_browser_compatible else None"/> Tương thích trình duyệt</label><br/>
+                        <label><input type="checkbox" name="is_legit_content" t-att-checked="'checked' if landing.is_legit_content else None"/> Nội dung không vi phạm pháp luật</label><br/>
+                        <label><input type="checkbox" name="is_clear_contact" t-att-checked="'checked' if landing.is_clear_contact else None"/> Có thông tin liên hệ rõ ràng</label><br/>
+                        <label><input type="checkbox" name="is_no_prohibited_content" t-att-checked="'checked' if landing.is_no_prohibited_content else None"/> Không có nội dung bị cấm</label><br/>
+
+                        <label>Góp ý:</label><br/>
+                        <textarea name="feedback" rows="5" style="width:100%;"><t t-esc="landing.feedback"/></textarea><br/>
+
+                        <button type="submit" class="btn btn-primary mt-2">Lưu và Đánh giá</button>
+                        </div>
+                    </form>
+                </div>
+        </div>
+
+        <div style="margin-top: 30px; padding-top: 60px">
+            <h4>Các liên kết nguy hiểm:</h4>
+            <t t-if="landing.dangerous_links">
+                <ul>
+                    <t t-foreach="landing.dangerous_links.split('\n')" t-as="link">
+                        <li>
+                            <a t-att-href="link" style="color:red;" target="_blank">
+                                <t t-esc="link"/>
+                            </a>
+                        </li>
+                    </t>
+                </ul>
+            </t>
+            <t t-else="">
+                <p>Không phát hiện liên kết nguy hiểm.</p>
+            </t>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <h4>Danh sách hình ảnh:</h4>
+            <t t-if="landing.image_list">
+                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                    <t t-foreach="landing.image_list.split('\n')" t-as="img">
+                        <img t-att-src="img" style="max-height: 120px; border: 1px solid #ccc;" />
+                    </t>
+                </div>
+            </t>
+            <t t-else="">
+                <p>Không có hình ảnh nào.</p>
+            </t>
+        </div>
+
+        <script type="text/javascript">
+            function setDevice(type) {
+                const iframe = document.getElementById("landingIframe");
+                if (type === "desktop") {
+                    iframe.style.width = "100%";
+                    iframe.style.height = "100vh";
+                } else if (type === "tablet") {
+                    iframe.style.width = "768px";
+                    iframe.style.height = "1024px";
+                } else if (type === "mobile") {
+                    iframe.style.width = "375px";
+                    iframe.style.height = "667px";
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                var warningModal = new bootstrap.Modal(document.getElementById("warningModal"));
+                warningModal.show();
+            });
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-..." crossorigin="anonymous"></script>
+    </t>
+  </template>
+</odoo>
