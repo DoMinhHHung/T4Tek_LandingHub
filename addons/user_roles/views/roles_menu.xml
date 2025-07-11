@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <menuitem id="menu_landing_root" name="Roles" sequence="10"/>
+
+  <menuitem 
+    id="menu_admin" 
+    name="Quản trị Landing Page" 
+    parent="menu_landing_root" 
+    action="action_landing_page" 
+    sequence="20" 
+    groups="user_roles.group_admin"/>
+
+  <menuitem 
+    id="menu_seo" 
+    name="SEO Landing Page" 
+    parent="menu_landing_root" 
+    action="action_landing_page" 
+    sequence="30" 
+    groups="user_roles.group_seo"/>
+
+
+  <menuitem 
+    id="menu_editor" 
+    name="Editor Landing Page" 
+    parent="menu_landing_root" 
+    action="action_landing_page" 
+    sequence="40" 
+    groups="user_roles.group_editor"/>
+
+  <menuitem 
+    id="menu_reviewer" 
+    name="Reviewer Landing Page" 
+    parent="menu_landing_root" 
+    action="action_landing_page" 
+    sequence="50" 
+    groups="user_roles.group_reviewer"/>
+
+  <menuitem 
+    id="menu_viewer" 
+    name="Viewer Landing Page" 
+    parent="menu_landing_root" 
+    action="action_landing_page" 
+    sequence="60" 
+    groups="user_roles.group_viewer"/>
+</odoo>

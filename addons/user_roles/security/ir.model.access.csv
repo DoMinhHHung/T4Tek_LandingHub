@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_landing_admin,landing_page.landing_page,model_landing_page_landing_page,user_roles.group_admin,1,1,1,1
+access_landing_seo,landing_page.landing_page,model_landing_page_landing_page,user_roles.group_seo,1,1,1,0
+access_landing_editor,landing_page.landing_page,model_landing_page_landing_page,user_roles.group_editor,1,1,1,0
+access_landing_reviewer,landing_page.landing_page,model_landing_page_landing_page,user_roles.group_reviewer,1,1,0,0
+access_landing_viewer,landing_page.landing_page,model_landing_page_landing_page,user_roles.group_viewer,1,0,0,0

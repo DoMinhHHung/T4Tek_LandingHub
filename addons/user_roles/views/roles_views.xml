@@ -1,0 +1,47 @@
+<odoo>
+  <record id="view_landing_page_form" model="ir.ui.view">
+    <field name="name">landing.page.form</field>
+    <field name="model">landing_page.landing_page</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="content"/>
+            <field name="state" readonly="1"/>
+            <field name="submitted_by" readonly="1"/>
+            <field name="reviewer_id" readonly="1"/>
+            <field name="history" readonly="1"/>
+            <button name="action_submit" string="Submit" type="object" invisible="state != 'draft'"/>
+            <button name="action_approve" string="Approve" type="object" groups="user_roles.group_reviewer" invisible="state != 'in_review'"/>
+            <button name="action_reject" string="Reject" type="object" groups="user_roles.group_reviewer" invisible="state != 'in_review'"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_landing_page_tree" model="ir.ui.view">
+    <field name="name">landing.page.tree</field>
+    <field name="model">landing_page.landing_page</field>
+    <field name="arch" type="xml">
+      <list>
+        <field name="name"/>
+        <field name="state"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="action_landing_page" model="ir.actions.act_window">
+    <field name="name">Landing Pages</field>
+    <field name="res_model">landing_page.landing_page</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
+  <menuitem id="menu_landing_root" name="Landing Pages"/>
+  <menuitem id="menu_landing_pages_admin" name="Manage Pages (Admin)" parent="menu_landing_root" action="action_landing_page" groups="user_roles.group_admin"/>
+  <menuitem id="menu_landing_pages_seo" name="Manage Pages (SEO)" parent="menu_landing_root" action="action_landing_page" groups="user_roles.group_seo"/>
+  <menuitem id="menu_landing_pages_editor" name="Manage Pages (Editor)" parent="menu_landing_root" action="action_landing_page" groups="user_roles.group_editor"/>
+  <menuitem id="menu_landing_pages_reviewer" name="Manage Pages (Reviewer)" parent="menu_landing_root" action="action_landing_page" groups="user_roles.group_reviewer"/>
+  <menuitem id="menu_landing_pages_viewer" name="Manage Pages (Viewer)" parent="menu_landing_root" action="action_landing_page" groups="user_roles.group_viewer"/>
+</odoo>
